@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using run_script.Data;
+using run_script.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 // tes 123
@@ -20,6 +21,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthDefaultConnection")
 ));
+
+// inject repositories
+builder.Services.AddScoped<ITokenRepository, TokenRepository>(); // inject the ITokenRepository to the program
+
 
 builder.Services.AddIdentityCore<IdentityUser>() // mendaftarkan layanan Identity Core ke dalam dependency injection (DI) container
     .AddRoles<IdentityRole>() // Menambahkan dukungan untuk roles-based authorization.

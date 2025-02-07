@@ -28,7 +28,7 @@ namespace run_script.Repositories
                 configuration["Jwt:Issuer"],// from appsettings
                 configuration["Jwt:Audience"],// from appsettings
                 claims, // all claims from above
-                expires: DateTime.Now.AddMinutes(15), // expired berapa menit
+                expires: DateTime.Now.AddHours(2), // expired berapa menit
                 signingCredentials: credentials // credentials from above
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
