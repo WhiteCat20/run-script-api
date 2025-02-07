@@ -21,9 +21,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthDefaultConnection")
 ));
+builder.Services.AddDbContext<ScriptDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+));
 
 // inject repositories
 builder.Services.AddScoped<ITokenRepository, TokenRepository>(); // inject the ITokenRepository to the program
+builder.Services.AddScoped<IScriptRepository, ScriptRepository>();
 
 
 builder.Services.AddIdentityCore<IdentityUser>() // mendaftarkan layanan Identity Core ke dalam dependency injection (DI) container
