@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using run_script.Data;
@@ -19,6 +20,23 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AuthDefaultConnection")
 ));
+
+builder.Services.AddIdentityCore<IdentityUser>() // mendaftarkan layanan Identity Core ke dalam dependency injection (DI) container
+    .AddRoles<IdentityRole>() // Menambahkan dukungan untuk roles-based authorization.
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("run-script") // Menambahkan token provider untuk menghasilkan dan memvalidasi token
+    .AddEntityFrameworkStores<AuthDbContext>() // konteks database yang berisi tabel-tabel terkait Identity
+    .AddDefaultTokenProviders();
+// kebijakan password untuk pengguna
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+}
+);
 
 // add authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
