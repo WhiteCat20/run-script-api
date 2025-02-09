@@ -56,7 +56,7 @@ namespace run_script.Repositories
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
                     FileName = "wsl.exe", // Menggunakan WSL sebagai shell
-                    Arguments = $"-e bash -c \"{command}\"", // Menjalankan perintah di dalam WSL
+                    Arguments = $"-e zsh -c \"{command}\"", // Menjalankan perintah di dalam WSL
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
@@ -79,6 +79,12 @@ namespace run_script.Repositories
             }
         }
 
+        public async Task<Script> CreateScriptAsync(Script script)
+        {
+            await context.AddAsync(script);
+            await context.SaveChangesAsync();
+            return script;
+        }
     }
 }
 

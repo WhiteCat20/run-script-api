@@ -6,6 +6,7 @@ namespace run_script.Repositories
     {
         Task<Script> GetScriptByIdAsync(int id);
         Task<List<Script>> GetAllScriptsAsync();
+        Task<Script> CreateScriptAsync(Script script);
         Task<(string Output, string Error)> RunScriptAsync(string script);
         Task<(string Output, string Error)> RunScriptFromDatabaseAsync(int id);
 

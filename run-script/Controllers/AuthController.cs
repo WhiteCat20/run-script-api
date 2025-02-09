@@ -55,7 +55,7 @@ namespace run_script.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginRequestDto)
         {
-            var user = await userManager.FindByEmailAsync(loginRequestDto.Username);
+            var user = await userManager.FindByEmailAsync(loginRequestDto.Email);
             if (user != null)
             {
                 var checkPasswordResult = await userManager.CheckPasswordAsync(user, loginRequestDto.Password);
@@ -68,17 +68,17 @@ namespace run_script.Controllers
                     if (roles != null && roles.Any())
                     {
                         // create token 
-                        var jwtToken = tokenRepository.CreateJWTToken(user, roles.ToList());
+                        var token = tokenRepository.CreateJWTToken(user, roles.ToList());
                         var response = new LoginResponseDTO
                         {
-                            JwtToken = jwtToken,
+                            token = token,
                         };
                         return Ok(response);
                     }
                 }
                 return BadRequest("Password Incorect!");
             }
-            return BadRequest("Username or Password Incorect!");
+            return BadRequest("Email or Password Incorect!");
         }
     }
 }

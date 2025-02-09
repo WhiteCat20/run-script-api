@@ -7,6 +7,8 @@ namespace run_script.Mappings
     {
         public AutoMapperProfiles() {
             CreateMap<Script, ScriptDTO>().ReverseMap();
+            CreateMap<Script, ScriptRequestDTO>().ReverseMap();
+
         }
     }
 }

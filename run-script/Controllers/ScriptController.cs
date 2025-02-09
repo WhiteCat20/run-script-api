@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using run_script.Models;
 using run_script.Repositories;
 
 namespace run_script.Controllers
@@ -9,10 +11,12 @@ namespace run_script.Controllers
     public class ScriptController : ControllerBase
     {
         private readonly IScriptRepository repository;
+        private readonly IMapper mapper;
 
-        public ScriptController(IScriptRepository repository)
+        public ScriptController(IScriptRepository repository, IMapper mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -34,6 +38,15 @@ namespace run_script.Controllers
             }
             return Ok(script);
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAsync([FromBody] ScriptRequestDTO requestDTO)
+        {
+            var domain = mapper.Map<Script>(requestDTO);
+            domain = await repository.CreateScriptAsync(domain);
+            var dto = mapper.Map<ScriptDTO>(domain);
+            return Created("", new { message = "Berhasil membuat script", data = dto });
         }
 
         [HttpPost("run")]
